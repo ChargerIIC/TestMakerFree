@@ -11,39 +11,88 @@ namespace TestMakerFree.Controllers
     [Route("api/[controller]")]
     public class QuizController : Controller
     {
+        private List<QuizViewModel> sampleQuizzes;
 
-        /// <summary>
-        /// GET: api/quiz/ByTitle
-        /// Retrieves the {num} Quizzes sorted by Title (A to Z)
-        /// </summary>
-        /// <param name="num">the number of quizzes to retrieve</param>
-        /// <returns>{num} Quizzes sorted by Title</returns>
-        [HttpGet("ByTitle/{num:int?}")]
-        public IActionResult ByTitle(int num = 10)
+        #region RESTful conventions methods 
+
+        /// <summary> 
+        /// GET: api/quiz/{}id 
+        /// Retrieves the Quiz with the given {id} 
+        /// </summary> 
+        /// <param name="id">The ID of an existing Quiz</param> 
+        /// <returns>the Quiz with the given {id}</returns> 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            var sampleQuizzes = ((JsonResult)Latest(num)).Value
-                as List<QuizViewModel>;
+            // create a sample quiz to match the given request 
+            var v = new QuizViewModel()
+            {
+                Id = id,
+                Title = String.Format("Sample quiz with id {0}", id),
+                Description = "Not a real quiz: it's just a sample!",
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now
+            };
 
+            // output the result in JSON format 
             return new JsonResult(
-                sampleQuizzes.OrderBy(t => t.Title),
+                v,
                 new JsonSerializerSettings()
                 {
                     Formatting = Formatting.Indented
                 });
         }
 
-        // GET api/quiz/latest 
+        /// <summary> 
+        /// Adds a new Answer to the Database 
+        /// </summary> 
+        /// <param name="m">The AnswerViewModel containing the data to insert</param> 
+        [HttpPut]
+        public IActionResult Put(AnswerViewModel m)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary> 
+        /// Edit the Answer with the given {id} 
+        /// </summary> 
+        /// <param name="m">The AnswerViewModel containing the data to update</param> 
+        [HttpPost]
+        public IActionResult Post(AnswerViewModel m)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary> 
+        /// Deletes the Answer with the given {id} from the Database 
+        /// </summary> 
+        /// <param name="id">The ID of an existing Answer</param> 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Attribute-based routing methods
+
+        /// <summary> 
+        /// GET: api/quiz/latest 
+        /// Retrieves the {num} latest Quizzes 
+        /// </summary> 
+        /// <param name="num">the number of quizzes to retrieve</param> 
+        /// <returns>the {num} latest Quizzes</returns>
         [HttpGet("Latest/{num}")]
         public IActionResult Latest(int num = 10)
         {
-            var sampleQuizzes = new List<QuizViewModel>();
+            var sampleTests = new List<QuizViewModel>();
 
             // add a first sample quiz 
             sampleQuizzes.Add(new QuizViewModel()
             {
                 Id = 1,
-                Title = "Which Bombardier character are you?",
-                Description = "Game-related personality test",
+                Title = "Which Dane character are you?",
+                Description = "Dane-related personality test",
                 CreatedDate = DateTime.Now,
                 LastModifiedDate = DateTime.Now
             });
@@ -89,5 +138,7 @@ namespace TestMakerFree.Controllers
                     Formatting = Formatting.Indented
                 });
         }
+
+        #endregion
     }
 }
