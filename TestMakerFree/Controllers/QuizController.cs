@@ -11,7 +11,7 @@ namespace TestMakerFree.Controllers
     [Route("api/[controller]")]
     public class QuizController : Controller
     {
-        private List<QuizViewModel> sampleQuizzes;
+        private List<QuizViewModel> sampleQuizzes = new List<QuizViewModel>();
 
         #region RESTful conventions methods 
 
